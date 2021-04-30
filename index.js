@@ -108,3 +108,42 @@ undoBtn.addEventListener('click', (e) => {
 
 	e.preventDefault();
 });
+
+//touch screen
+//when touch is clicked
+canvas.addEventListener('touchstart', (e) => {
+	ctx.beginPath();
+	ctx.moveTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+	isDrawing = true;
+});
+
+//when mouse is released
+canvas.addEventListener('touchend', () => {
+	if (isDrawing) {
+		isDrawing = false;
+		ctx.closePath();
+		index++;
+		restore_array[index] = ctx.getImageData(0, 0, canvas.width, canvas.height);
+		console.log(restore_array);
+	}
+});
+canvas.addEventListener('touchcancel', () => {
+	if (isDrawing) {
+		isDrawing = false;
+		ctx.closePath();
+		index++;
+		restore_array[index] = ctx.getImageData(0, 0, canvas.width, canvas.height);
+	}
+});
+
+//when mouse is clicked and dragged
+canvas.addEventListener('touchmove', (e) => {
+	if (isDrawing) {
+		ctx.lineTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+		ctx.strokeStyle = draw_color;
+		ctx.lineCap = 'round';
+		ctx.lineJoin = 'round';
+		ctx.lineWidth = line_width;
+		ctx.stroke();
+	}
+});
